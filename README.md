@@ -1,7 +1,7 @@
 # mge
 MGE Miniproject
 
-Ein LAN Messanger App, welche über Websockets mit einem Server spricht.
+Ein LAN Messanger App, welche über Websockets mit einem Server (websocket echo server) spricht.
 
 Features (Punkteverteilung)
 - [ ] Verwendung von Kotlin statt Java (3Pt)
