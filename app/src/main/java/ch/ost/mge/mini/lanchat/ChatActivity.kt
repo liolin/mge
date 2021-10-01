@@ -12,7 +12,7 @@ class ChatActivity : AppCompatActivity() {
 
 
         val goToHomeIntend = Intent(this, MainActivity::class.java)
-        val btnBack = findViewById<Button>(R.id.btnBackToHome)
+        val btnBack = findViewById<Button>(R.id.btnChatBackToHome)
         btnBack.setOnClickListener { startActivity(goToHomeIntend) }
     }
 }

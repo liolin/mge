@@ -11,7 +11,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val switchToChatActivityIntend = Intent(this, ChatActivity::class.java)
+        val switchToSettingsActivity = Intent(this, SettingsActivity::class.java);
         val chatButton = findViewById<Button>(R.id.btnGoToChat);
+        val settingsButton = findViewById<Button>(R.id.btnGoToSettings)
         chatButton.setOnClickListener { startActivity(switchToChatActivityIntend) }
+        settingsButton.setOnClickListener { startActivity(switchToSettingsActivity) }
     }
 }
