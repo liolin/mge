@@ -7,13 +7,15 @@ import java.net.URI
 import org.java_websocket.client.WebSocketClient
 import org.java_websocket.handshake.ServerHandshake
 
-class WebSocketClient(uri: URI) : WebSocketClient(uri) {
+class WebSocketClient(uri: URI, val handleMessage: (message: String?) -> Unit) : WebSocketClient(uri) {
+
     override fun onOpen(handshakedata: ServerHandshake?) {
         Log.d("WebSocketClient", "Connection opened")
     }
 
     override fun onMessage(message: String?) {
         Log.d("WebSocketClient", "Message received: $message")
+        handleMessage(message)
     }
 
     override fun onClose(code: Int, reason: String?, remote: Boolean) {

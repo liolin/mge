@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 
 import java.net.URI
 
@@ -42,6 +43,10 @@ class ChatActivity : AppCompatActivity() {
         Log.d("ChatActivity", "Create new URI")
         val uri = URI("ws://192.168.1.15:9000")
         Log.d("ChatActivity", "Create new WebSocketClient")
-        return WebSocketClient(uri)
+        return WebSocketClient(uri, ::displayMessage)
+    }
+
+    private fun displayMessage(message: String?) {
+        TODO("Not implemented yet")
     }
 }
