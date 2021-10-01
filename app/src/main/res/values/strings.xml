@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">LANChat</string>
+    <string name="lets_chat">Let\'s Chat</string>
+    <string name="settings">Settings</string>
 </resources>
