@@ -1,5 +1,6 @@
 package ch.ost.mge.mini.lanchat.activities
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,6 +8,9 @@ import android.widget.Button
 import android.widget.EditText
 import ch.ost.mge.mini.lanchat.R
 import ch.ost.mge.mini.lanchat.model.SettingsStore
+
+
+
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,6 +27,8 @@ class SettingsActivity : AppCompatActivity() {
         btnSave.setOnClickListener {
             SettingsStore.serverAddress = txtServerAddress.text.toString()
             SettingsStore.username = txtUsername.text.toString()
+            SettingsStore.save(this)
         }
+
     }
 }

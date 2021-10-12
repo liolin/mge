@@ -25,4 +25,10 @@ class WebSocketClient(uri: URI, val handleMessage: (message: String?) -> Unit) :
     override fun onError(ex: Exception?) {
         Log.d("WebSocketClient", "Oh no, something went wrong: ${ex.let { it.toString() }}")
     }
+
+    companion object Factory {
+        fun create(uri: URI, handleMessage: (message: String?) -> Unit): ch.ost.mge.mini.lanchat.WebSocketClient {
+            return WebSocketClient(uri, handleMessage)
+        }
+    }
 }

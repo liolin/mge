@@ -12,6 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import ch.ost.mge.mini.lanchat.adapter.MessageAdapter
 import ch.ost.mge.mini.lanchat.R
 import ch.ost.mge.mini.lanchat.WebSocketClient
+import ch.ost.mge.mini.lanchat.model.Message
+import ch.ost.mge.mini.lanchat.model.MessageRepository
+import ch.ost.mge.mini.lanchat.model.SettingsStore
 
 
 class ChatActivity : AppCompatActivity() {
@@ -29,7 +32,7 @@ class ChatActivity : AppCompatActivity() {
         setupUI()
 
         username = intent.extras?.getString("username").toString()
-        webSocketClient = newWebSocketClient()
+        webSocketClient = WebSocketClient.create(URI("ws://${SettingsStore.serverAddress}:9000"), ::displayMessage)
         webSocketClient.connect()
 
     }
@@ -57,15 +60,11 @@ class ChatActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
     }
 
-    private fun newWebSocketClient(): WebSocketClient {
-        val uri = URI("ws://192.168.1.15:9000")
-        return WebSocketClient(uri, ::displayMessage)
-    }
-
     private fun displayMessage(message: String?) {
         val dataFromServer = message?.split(':')
         if (dataFromServer != null) {
-            adapter.addMessage(dataFromServer[0], dataFromServer[1])
+            val message = Message(dataFromServer[0], dataFromServer[1])
+            MessageRepository.addMessage(message)
         }
     }
 }

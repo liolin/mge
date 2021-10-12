@@ -9,7 +9,7 @@ import ch.ost.mge.mini.lanchat.model.Message
 import kotlin.collections.ArrayList
 
 class MessageAdapter : RecyclerView.Adapter<MessageViewHolder>() {
-    val dataset: ArrayList<Message> = ArrayList()
+    private val dataset: ArrayList<Message> = ArrayList()
 
 
     fun addMessage(name: String, message: String) {
