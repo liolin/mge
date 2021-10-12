@@ -35,7 +35,7 @@
         app:layout_constraintTop_toTopOf="@+id/btnSend" />
 
     <TextView
-        android:id="@+id/lblChatTitle"
+        android:id="@+id/lblChatUsername"
         android:layout_width="0dp"
         android:layout_height="45dp"
         android:layout_marginStart="1dp"
@@ -79,7 +79,7 @@
         android:layout_marginBottom="27dp"
         android:text="@string/back"
         app:layout_constraintBottom_toTopOf="@+id/viewChat"
-        app:layout_constraintStart_toStartOf="@+id/lblChatTitle"
+        app:layout_constraintStart_toStartOf="@+id/lblChatUsername"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

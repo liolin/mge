@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 
 import java.net.URI
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +25,7 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var btnBack: Button
     private lateinit var btnSend: Button
     private lateinit var txtMessage: EditText
+    private lateinit var lblUsername: TextView
     private lateinit var username: String
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: MessageAdapter
@@ -33,11 +35,12 @@ class ChatActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
-        setupUI()
 
         username = SettingsStore.username
         webSocketClient = WebSocketClient.create(URI("ws://${SettingsStore.serverAddress}:9000"), ::displayMessage)
         webSocketClient.connect()
+
+        setupUI()
     }
 
     override fun onResume() {
@@ -49,8 +52,9 @@ class ChatActivity : AppCompatActivity() {
         btnBack = findViewById(R.id.btnChatBackToHome)
         btnSend = findViewById(R.id.btnSend)
         txtMessage = findViewById(R.id.txtMessage)
+        lblUsername = findViewById(R.id.lblChatUsername)
 
-
+        lblUsername.text = username
         val goToHomeIntend = MainActivity.createIntent(this)
         btnBack.setOnClickListener { startActivity(goToHomeIntend) }
         btnSend.setOnClickListener {
