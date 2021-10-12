@@ -1,15 +1,14 @@
-package ch.ost.mge.mini.lanchat
+package ch.ost.mge.mini.lanchat.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import ch.ost.mge.mini.lanchat.SettingsStore;
+import ch.ost.mge.mini.lanchat.R
+import ch.ost.mge.mini.lanchat.model.SettingsStore
 
 class SettingsActivity : AppCompatActivity() {
-    private val store = SettingsStore()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
@@ -22,8 +21,8 @@ class SettingsActivity : AppCompatActivity() {
 
         btnBack.setOnClickListener { startActivity(switchToHomeActivity) }
         btnSave.setOnClickListener {
-            store.serverAddress = txtServerAddress.text.toString()
-            store.username = txtUsername.text.toString()
+            SettingsStore.serverAddress = txtServerAddress.text.toString()
+            SettingsStore.username = txtUsername.text.toString()
         }
     }
 }

@@ -1,9 +1,10 @@
-package ch.ost.mge.mini.lanchat
+package ch.ost.mge.mini.lanchat.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import ch.ost.mge.mini.lanchat.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,7 +15,10 @@ class MainActivity : AppCompatActivity() {
         val switchToSettingsActivity = Intent(this, SettingsActivity::class.java);
         val chatButton = findViewById<Button>(R.id.btnGoToChat);
         val settingsButton = findViewById<Button>(R.id.btnGoToSettings)
-        chatButton.setOnClickListener { startActivity(switchToChatActivityIntend) }
+        chatButton.setOnClickListener {
+            switchToChatActivityIntend.putExtra("username", "Hans")
+            startActivity(switchToChatActivityIntend)
+        }
         settingsButton.setOnClickListener { startActivity(switchToSettingsActivity) }
     }
 }

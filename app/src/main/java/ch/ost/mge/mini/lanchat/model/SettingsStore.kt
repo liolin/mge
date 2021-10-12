@@ -1,6 +1,6 @@
-package ch.ost.mge.mini.lanchat
+package ch.ost.mge.mini.lanchat.model
 
-class SettingsStore {
+object SettingsStore {
     var serverAddress: String = ""
     var username: String = ""
 }
