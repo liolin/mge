@@ -16,6 +16,7 @@ import ch.ost.mge.mini.lanchat.WebSocketClient
 import ch.ost.mge.mini.lanchat.model.Message
 import ch.ost.mge.mini.lanchat.model.MessageRepository
 import ch.ost.mge.mini.lanchat.model.SettingsStore
+import com.google.gson.Gson
 
 
 class ChatActivity : AppCompatActivity() {
@@ -26,6 +27,8 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var username: String
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: MessageAdapter
+
+    private val gson = Gson()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,8 +56,9 @@ class ChatActivity : AppCompatActivity() {
         btnSend.setOnClickListener {
             val message = Message(username, txtMessage.text.toString())
             MessageRepository.addMessage(message)
-            webSocketClient.send("$username:${txtMessage.text}")
+            webSocketClient.send(gson.toJson(message))
             txtMessage.setText("")
+            adapter.notifyItemInserted(MessageRepository.size() - 1)
         }
 
         adapter = MessageAdapter(MessageRepository.getMessages())
@@ -63,11 +67,11 @@ class ChatActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
     }
 
-    private fun displayMessage(message: String?) {
-        val dataFromServer = message?.split(':')
+    private fun displayMessage(dataFromServer: String?) {
         if (dataFromServer != null) {
-            val message = Message(dataFromServer[0], dataFromServer[1])
+            val message = gson.fromJson(dataFromServer, Message::class.java)
             MessageRepository.addMessage(message)
+            adapter.notifyItemInserted(MessageRepository.size() - 1)
         }
     }
 

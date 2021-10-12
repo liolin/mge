@@ -5,7 +5,7 @@ object MessageRepository {
 
     init {
         data.add(Message("hansi", "Hallo Welt"))
-        data.add(Message("hansi", "ist jemand zu hause?"))
+        data.add(Message("hansi", "ist jemand zu Hause?"))
     }
     fun getMessages(): ArrayList<Message> {
         return data
@@ -13,5 +13,9 @@ object MessageRepository {
 
     fun addMessage(message: Message) {
         data.add(message)
+    }
+
+    fun size(): Int {
+        return data.size
     }
 }
