@@ -20,12 +20,12 @@ import ch.ost.mge.mini.lanchat.model.SettingsStore
 
 class ChatActivity : AppCompatActivity() {
     private lateinit var webSocketClient: WebSocketClient
-    private lateinit var recyclerView: RecyclerView
     private lateinit var btnBack: Button
     private lateinit var btnSend: Button
     private lateinit var txtMessage: EditText
     private lateinit var username: String
-
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: MessageAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +35,11 @@ class ChatActivity : AppCompatActivity() {
         username = SettingsStore.username
         webSocketClient = WebSocketClient.create(URI("ws://${SettingsStore.serverAddress}:9000"), ::displayMessage)
         webSocketClient.connect()
+    }
 
+    override fun onResume() {
+        super.onResume()
+        adapter.notifyDataSetChanged()
     }
 
     private fun setupUI() {
@@ -53,9 +57,10 @@ class ChatActivity : AppCompatActivity() {
             txtMessage.setText("")
         }
 
+        adapter = MessageAdapter(MessageRepository.getMessages())
         recyclerView = findViewById(R.id.viewChat)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = MessageAdapter()
+        recyclerView.adapter = adapter
     }
 
     private fun displayMessage(message: String?) {

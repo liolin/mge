@@ -7,9 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ch.ost.mge.mini.lanchat.model.Message
 import kotlin.collections.ArrayList
 
-class MessageAdapter : RecyclerView.Adapter<MessageViewHolder>() {
-    private val dataset: ArrayList<Message> = ArrayList()
-
+class MessageAdapter(private val dataset: ArrayList<Message>) : RecyclerView.Adapter<MessageViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
         val view = LayoutInflater.from(parent.context)
