@@ -1,5 +1,6 @@
 package ch.ost.mge.mini.lanchat.activities
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -24,14 +25,14 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var btnSend: Button
     private lateinit var txtMessage: EditText
     private lateinit var username: String
-    private lateinit var adapter: MessageAdapter
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
         setupUI()
 
-        username = intent.extras?.getString("username").toString()
+        username = SettingsStore.username
         webSocketClient = WebSocketClient.create(URI("ws://${SettingsStore.serverAddress}:9000"), ::displayMessage)
         webSocketClient.connect()
 
@@ -43,21 +44,18 @@ class ChatActivity : AppCompatActivity() {
         txtMessage = findViewById(R.id.txtMessage)
 
 
-        val goToHomeIntend = Intent(this, MainActivity::class.java)
+        val goToHomeIntend = MainActivity.createIntent(this)
         btnBack.setOnClickListener { startActivity(goToHomeIntend) }
         btnSend.setOnClickListener {
-            val message = txtMessage.text.toString()
-            adapter.addMessage(username, message)
-            webSocketClient.send("$username:${txtMessage.text.toString()}")
+            val message = Message(username, txtMessage.text.toString())
+            MessageRepository.addMessage(message)
+            webSocketClient.send("$username:${txtMessage.text}")
             txtMessage.setText("")
         }
 
         recyclerView = findViewById(R.id.viewChat)
-        val layoutManager: RecyclerView.LayoutManager
-        layoutManager = LinearLayoutManager(this)
-        recyclerView.layoutManager = layoutManager
-        adapter = MessageAdapter()
-        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = MessageAdapter()
     }
 
     private fun displayMessage(message: String?) {
@@ -65,6 +63,12 @@ class ChatActivity : AppCompatActivity() {
         if (dataFromServer != null) {
             val message = Message(dataFromServer[0], dataFromServer[1])
             MessageRepository.addMessage(message)
+        }
+    }
+
+    companion object Factory {
+        fun createIntent(context: Context): Intent {
+            return Intent(context, ChatActivity::class.java)
         }
     }
 }
