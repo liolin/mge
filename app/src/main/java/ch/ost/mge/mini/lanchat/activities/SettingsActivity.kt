@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import ch.ost.mge.mini.lanchat.R
-import ch.ost.mge.mini.lanchat.WebSocketClient
 import ch.ost.mge.mini.lanchat.model.SettingsStore
 
 

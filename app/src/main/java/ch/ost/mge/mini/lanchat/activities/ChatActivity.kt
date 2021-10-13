@@ -13,10 +13,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ch.ost.mge.mini.lanchat.adapter.MessageAdapter
 import ch.ost.mge.mini.lanchat.R
-import ch.ost.mge.mini.lanchat.WebSocketClient
+import ch.ost.mge.mini.lanchat.services.WebSocketClient
 import ch.ost.mge.mini.lanchat.model.Message
 import ch.ost.mge.mini.lanchat.model.MessageRepository
 import ch.ost.mge.mini.lanchat.model.SettingsStore
+import ch.ost.mge.mini.lanchat.services.NotificationSender
 import com.google.gson.Gson
 
 
@@ -30,6 +31,7 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: MessageAdapter
 
+    private val notificationSender = NotificationSender()
     private val gson = Gson()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +41,7 @@ class ChatActivity : AppCompatActivity() {
         username = SettingsStore.username
         webSocketClient = WebSocketClient.create(URI("ws://${SettingsStore.serverAddress}:9000"), ::displayMessage)
         webSocketClient.connect()
+        notificationSender.createNotificationChanel(this)
 
         setupUI()
     }
@@ -62,7 +65,9 @@ class ChatActivity : AppCompatActivity() {
             MessageRepository.addMessage(message)
             webSocketClient.send(gson.toJson(message))
             txtMessage.setText("")
-            adapter.notifyItemInserted(MessageRepository.size() - 1)
+            // TODO: fix
+            adapter.notifyDataSetChanged()
+            //adapter.notifyItemInserted(MessageRepository.size() - 1)
         }
 
         adapter = MessageAdapter(MessageRepository.getMessages())
@@ -75,7 +80,10 @@ class ChatActivity : AppCompatActivity() {
         if (dataFromServer != null) {
             val message = gson.fromJson(dataFromServer, Message::class.java)
             MessageRepository.addMessage(message)
-            adapter.notifyItemInserted(MessageRepository.size() - 1)
+            // TODO: fix
+            //adapter.notifyItemInserted(MessageRepository.size() - 1)
+            adapter.notifyDataSetChanged()
+            notificationSender.sendNotification(this, "New Message", message.message)
         }
     }
 

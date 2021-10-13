@@ -1,4 +1,4 @@
-package ch.ost.mge.mini.lanchat
+package ch.ost.mge.mini.lanchat.services
 
 import android.util.Log
 import java.lang.Exception
@@ -27,7 +27,7 @@ class WebSocketClient(uri: URI, val handleMessage: (message: String?) -> Unit) :
     }
 
     companion object Factory {
-        fun create(uri: URI, handleMessage: (message: String?) -> Unit): ch.ost.mge.mini.lanchat.WebSocketClient {
+        fun create(uri: URI, handleMessage: (message: String?) -> Unit): ch.ost.mge.mini.lanchat.services.WebSocketClient {
             return WebSocketClient(uri, handleMessage)
         }
     }
