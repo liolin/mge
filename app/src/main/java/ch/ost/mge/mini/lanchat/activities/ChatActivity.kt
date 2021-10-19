@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -19,9 +20,10 @@ import ch.ost.mge.mini.lanchat.model.MessageRepository
 import ch.ost.mge.mini.lanchat.model.SettingsStore
 import ch.ost.mge.mini.lanchat.services.NotificationSender
 import com.google.gson.Gson
+import java.util.*
 
 
-class ChatActivity : AppCompatActivity() {
+class ChatActivity : AppCompatActivity(), Observer {
     private lateinit var webSocketClient: WebSocketClient
     private lateinit var btnBack: Button
     private lateinit var btnSend: Button
@@ -29,26 +31,38 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var lblUsername: TextView
     private lateinit var username: String
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: MessageAdapter
-
-    private val notificationSender = NotificationSender()
+    private lateinit var notificationSender: NotificationSender
     private val gson = Gson()
+
+
+    companion object Factory {
+        fun createIntent(context: Context): Intent {
+            return Intent(context, ChatActivity::class.java)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
 
         username = SettingsStore.username
-        webSocketClient = WebSocketClient.create(URI("ws://${SettingsStore.serverAddress}:9000"), ::displayMessage)
-        webSocketClient.connect()
-        notificationSender.createNotificationChanel(this)
+        if (!this::webSocketClient.isInitialized) {
+            webSocketClient = WebSocketClient.create(
+                URI("ws://${SettingsStore.serverAddress}:9000"),
+                MessageRepository::addMessage
+            )
+            webSocketClient.connect()
+        }
+        notificationSender = NotificationSender(this)
+        MessageRepository.addObserver(this)
+
 
         setupUI()
     }
 
     override fun onResume() {
         super.onResume()
-        adapter.notifyDataSetChanged()
+        recyclerView.adapter?.notifyDataSetChanged()
     }
 
     private fun setupUI() {
@@ -58,38 +72,30 @@ class ChatActivity : AppCompatActivity() {
         lblUsername = findViewById(R.id.lblChatUsername)
 
         lblUsername.text = username
-        val goToHomeIntend = MainActivity.createIntent(this)
-        btnBack.setOnClickListener { startActivity(goToHomeIntend) }
+        btnBack.setOnClickListener { startActivity(MainActivity.createIntent(this)) }
         btnSend.setOnClickListener {
             val message = Message(username, txtMessage.text.toString())
-            MessageRepository.addMessage(message)
             webSocketClient.send(gson.toJson(message))
             txtMessage.setText("")
-            // TODO: fix
-            adapter.notifyDataSetChanged()
-            //adapter.notifyItemInserted(MessageRepository.size() - 1)
         }
 
-        adapter = MessageAdapter(MessageRepository.getMessages())
         recyclerView = findViewById(R.id.viewChat)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = adapter
+        recyclerView.adapter = MessageAdapter(MessageRepository.getMessages())
     }
 
-    private fun displayMessage(dataFromServer: String?) {
-        if (dataFromServer != null) {
-            val message = gson.fromJson(dataFromServer, Message::class.java)
-            MessageRepository.addMessage(message)
-            // TODO: fix
-            //adapter.notifyItemInserted(MessageRepository.size() - 1)
-            adapter.notifyDataSetChanged()
-            notificationSender.sendNotification(this, "New Message", message.message)
+    override fun update(p0: Observable?, message: Any?) {
+        runOnUiThread {
+            if (message != null) {
+                val message = message as Message
+                recyclerView.adapter?.notifyItemInserted(MessageRepository.size() - 1)
+                notificationSender.sendNotification(this, "New Message", message.message)
+            }
         }
     }
 
-    companion object Factory {
-        fun createIntent(context: Context): Intent {
-            return Intent(context, ChatActivity::class.java)
-        }
+    override fun onStop() {
+        super.onStop()
+        webSocketClient.close()
     }
 }

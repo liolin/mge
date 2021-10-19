@@ -4,10 +4,11 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 
-class NotificationSender {
+class NotificationSender(context: Context) {
     private val CID = "LANChat_Channel"
     private val CNAME = "LANChat Notifications"
     private val CDESC = "A Channel for LANChat"
@@ -16,17 +17,16 @@ class NotificationSender {
 
     private lateinit var manager: NotificationManagerCompat
 
-
-    fun createNotificationChanel(context: Context) {
+    init {
+        manager = NotificationManagerCompat.from(context)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(CID, CNAME, CIMP).apply {
                 description = CDESC
             }
-            manager = NotificationManagerCompat.from(context)
             manager.createNotificationChannel(channel)
+            Log.d("NotificationSender", manager?.toString())
         }
     }
-
 
     fun sendNotification(context: Context, title: String, text: String) {
         val notification = NotificationCompat.Builder(context, CID)
