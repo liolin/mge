@@ -15,13 +15,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         SettingsStore.load(this)
 
-        val switchToChatActivityIntend = ChatActivity.createIntent(this)
-        val switchToSettingsActivity = SettingsActivity.createIntent(this)
-
         val chatButton = findViewById<Button>(R.id.btnGoToChat)
         val settingsButton = findViewById<Button>(R.id.btnGoToSettings)
-        chatButton.setOnClickListener { startActivity(switchToChatActivityIntend) }
-        settingsButton.setOnClickListener { startActivity(switchToSettingsActivity) }
+        chatButton.setOnClickListener { startActivity(ChatActivity.createIntent(this)) }
+        settingsButton.setOnClickListener { startActivity(SettingsActivity.createIntent(this)) }
     }
 
     companion object Factory {

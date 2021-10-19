@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -21,7 +20,6 @@ import ch.ost.mge.mini.lanchat.model.SettingsStore
 import ch.ost.mge.mini.lanchat.services.NotificationSender
 import com.google.gson.Gson
 import java.util.*
-
 
 class ChatActivity : AppCompatActivity(), Observer {
     private lateinit var webSocketClient: WebSocketClient
@@ -46,18 +44,20 @@ class ChatActivity : AppCompatActivity(), Observer {
         setContentView(R.layout.activity_chat)
 
         username = SettingsStore.username
-        if (!this::webSocketClient.isInitialized) {
-            webSocketClient = WebSocketClient.create(
-                URI("ws://${SettingsStore.serverAddress}:9000"),
-                MessageRepository::addMessage
-            )
-            webSocketClient.connect()
-        }
         notificationSender = NotificationSender(this)
+        webSocketClient = WebSocketClient.create(
+            URI("ws://${SettingsStore.serverAddress}:9000"),
+            MessageRepository::addMessage
+        )
+        webSocketClient.connect()
         MessageRepository.addObserver(this)
 
-
         setupUI()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        webSocketClient.close()
     }
 
     override fun onResume() {
@@ -73,29 +73,33 @@ class ChatActivity : AppCompatActivity(), Observer {
 
         lblUsername.text = username
         btnBack.setOnClickListener { startActivity(MainActivity.createIntent(this)) }
-        btnSend.setOnClickListener {
-            val message = Message(username, txtMessage.text.toString())
-            webSocketClient.send(gson.toJson(message))
-            txtMessage.setText("")
-        }
+        btnSend.setOnClickListener { sendMessage() }
 
         recyclerView = findViewById(R.id.viewChat)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = MessageAdapter(MessageRepository.getMessages())
     }
 
-    override fun update(p0: Observable?, message: Any?) {
-        runOnUiThread {
-            if (message != null) {
-                val message = message as Message
-                recyclerView.adapter?.notifyItemInserted(MessageRepository.size() - 1)
-                notificationSender.sendNotification(this, "New Message", message.message)
+    override fun update(p0: Observable?, data: Any?) {
+        if (p0 == MessageRepository) {
+            if (data != null) {
+                val message = data as Message
+                messageReceived(message)
             }
         }
     }
 
-    override fun onStop() {
-        super.onStop()
-        webSocketClient.close()
+    private fun sendMessage() {
+        val message = Message(username, txtMessage.text.toString())
+        webSocketClient.send(gson.toJson(message))
+        txtMessage.setText("")
     }
+
+    private fun messageReceived(message: Message) {
+        runOnUiThread {
+            recyclerView.adapter?.notifyItemInserted(MessageRepository.size() - 1)
+            notificationSender.sendNotification(this, "New Message", message.message)
+        }
+    }
+
 }

@@ -9,31 +9,29 @@ import android.widget.EditText
 import ch.ost.mge.mini.lanchat.R
 import ch.ost.mge.mini.lanchat.model.SettingsStore
 
-
-
-
 class SettingsActivity : AppCompatActivity() {
     private lateinit var btnBack: Button
     private lateinit var btnSave: Button
     private lateinit var txtServerAddress: EditText
     private lateinit var txtUsername: EditText
 
+    companion object Factory {
+        fun createIntent(context: Context): Intent {
+            return Intent(context, SettingsActivity::class.java)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val switchToHomeActivity = MainActivity.createIntent(this)
         btnBack = findViewById(R.id.btnSettingsBackToHome)
         btnSave = findViewById(R.id.btnSave)
         txtServerAddress = findViewById(R.id.txtServerAddress)
         txtUsername = findViewById(R.id.txtUsername)
 
-        btnBack.setOnClickListener { startActivity(switchToHomeActivity) }
-        btnSave.setOnClickListener {
-            SettingsStore.serverAddress = txtServerAddress.text.toString()
-            SettingsStore.username = txtUsername.text.toString()
-            SettingsStore.save(this)
-        }
+        btnBack.setOnClickListener { startActivity(MainActivity.createIntent(this)) }
+        btnSave.setOnClickListener { saveSettings() }
 
     }
 
@@ -44,9 +42,9 @@ class SettingsActivity : AppCompatActivity() {
         txtServerAddress.setText(SettingsStore.serverAddress)
     }
 
-    companion object Factory {
-        fun createIntent(context: Context): Intent {
-            return Intent(context, SettingsActivity::class.java)
-        }
+    private fun saveSettings() {
+        SettingsStore.serverAddress = txtServerAddress.text.toString()
+        SettingsStore.username = txtUsername.text.toString()
+        SettingsStore.save(this)
     }
 }
