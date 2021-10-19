@@ -26,7 +26,7 @@ class ChatActivity : AppCompatActivity(), Observer {
     private lateinit var btnBack: Button
     private lateinit var btnSend: Button
     private lateinit var txtMessage: EditText
-    private lateinit var lblUsername: TextView
+    private lateinit var lblStatusMessage: TextView
     private lateinit var username: String
     private lateinit var recyclerView: RecyclerView
     private lateinit var notificationSender: NotificationSender
@@ -47,7 +47,8 @@ class ChatActivity : AppCompatActivity(), Observer {
         notificationSender = NotificationSender(this)
         webSocketClient = WebSocketClient.create(
             URI("ws://${SettingsStore.serverAddress}:9000"),
-            MessageRepository::addMessage
+            MessageRepository::addMessage,
+            ::displayNoConnection
         )
         webSocketClient.connect()
         MessageRepository.addObserver(this)
@@ -69,9 +70,8 @@ class ChatActivity : AppCompatActivity(), Observer {
         btnBack = findViewById(R.id.btnChatBackToHome)
         btnSend = findViewById(R.id.btnSend)
         txtMessage = findViewById(R.id.txtMessage)
-        lblUsername = findViewById(R.id.lblChatUsername)
+        lblStatusMessage = findViewById(R.id.lblStatusMessage)
 
-        lblUsername.text = username
         btnBack.setOnClickListener { startActivity(MainActivity.createIntent(this)) }
         btnSend.setOnClickListener { sendMessage() }
 
@@ -100,6 +100,10 @@ class ChatActivity : AppCompatActivity(), Observer {
             recyclerView.adapter?.notifyItemInserted(MessageRepository.size() - 1)
             notificationSender.sendNotification(this, "New Message", message.message)
         }
+    }
+
+    private fun displayNoConnection(ex: java.net.ConnectException) {
+        lblStatusMessage.text = "Oh no. No connection to Server: ${SettingsStore.serverAddress}"
     }
 
 }

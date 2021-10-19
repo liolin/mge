@@ -35,7 +35,7 @@
         app:layout_constraintTop_toTopOf="@+id/btnSend" />
 
     <TextView
-        android:id="@+id/lblChatUsername"
+        android:id="@+id/lblStatusMessage"
         android:layout_width="0dp"
         android:layout_height="45dp"
         android:layout_marginStart="1dp"
@@ -44,7 +44,6 @@
         android:layout_marginBottom="32dp"
         android:paddingStart="170dp"
         android:paddingTop="13dp"
-        android:text="@string/chatview"
         android:textColor="@color/black"
         app:layout_constraintBottom_toTopOf="@+id/viewChat"
         app:layout_constraintEnd_toEndOf="parent"
@@ -79,7 +78,7 @@
         android:layout_marginBottom="27dp"
         android:text="@string/back"
         app:layout_constraintBottom_toTopOf="@+id/viewChat"
-        app:layout_constraintStart_toStartOf="@+id/lblChatUsername"
+        app:layout_constraintStart_toStartOf="@+id/lblStatusMessage"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
