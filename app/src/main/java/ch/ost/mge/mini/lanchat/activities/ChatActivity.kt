@@ -47,8 +47,10 @@ class ChatActivity : AppCompatActivity(), Observer {
         notificationSender = NotificationSender(this)
         webSocketClient = WebSocketClient.create(
             URI("ws://${SettingsStore.serverAddress}:9000"),
+            {},
             MessageRepository::addMessage,
-            ::displayNoConnection
+            {},
+            { lblStatusMessage.text = "Oh no. No connection to Server: ${SettingsStore.serverAddress}" }
         )
         webSocketClient.connect()
         MessageRepository.addObserver(this)
@@ -102,8 +104,5 @@ class ChatActivity : AppCompatActivity(), Observer {
         }
     }
 
-    private fun displayNoConnection(ex: java.net.ConnectException) {
-        lblStatusMessage.text = "Oh no. No connection to Server: ${SettingsStore.serverAddress}"
-    }
 
 }
