@@ -9,4 +9,7 @@
     <string name="save">Save</string>
     <string name="server_address">Server Address</string>
     <string name="username">Username</string>
+    <string name="CID">LANChat_Channel</string>
+    <string name="CNAME">LANChat Notifications</string>
+    <string name="CDESC">A Channel for LANChat</string>
 </resources>

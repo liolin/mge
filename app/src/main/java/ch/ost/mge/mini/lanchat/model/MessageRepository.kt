@@ -9,17 +9,17 @@ object MessageRepository : Observable() {
     private val gson = Gson()
 
     init {
+        // Just some example Data
         data.add(Message("hansi", "Hallo Welt"))
         data.add(Message("hansi", "ist jemand zu Hause?"))
     }
+
     fun getMessages(): ArrayList<Message> {
         return data
     }
 
-    fun addMessage(message: Message) {
-        data.add(message)
-        setChanged();
-        notifyObservers(message)
+    fun size(): Int {
+        return data.size
     }
 
     fun addMessage(message: String?) {
@@ -29,7 +29,9 @@ object MessageRepository : Observable() {
         }
     }
 
-    fun size(): Int {
-        return data.size
+    private fun addMessage(message: Message) {
+        data.add(message)
+        setChanged();
+        notifyObservers(message)
     }
 }

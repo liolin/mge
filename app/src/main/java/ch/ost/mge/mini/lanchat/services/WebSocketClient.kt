@@ -19,7 +19,7 @@ class WebSocketClient(uri: URI, val handleMessage: (message: String?) -> Unit) :
     }
 
     override fun onClose(code: Int, reason: String?, remote: Boolean) {
-        Log.d("WebSocketClient", "Connection closed")
+        Log.d("WebSocketClient", "Connection closed $reason")
     }
 
     override fun onError(ex: Exception?) {
