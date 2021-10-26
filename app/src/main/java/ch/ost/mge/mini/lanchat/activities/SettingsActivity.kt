@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import ch.ost.mge.mini.lanchat.R
 import ch.ost.mge.mini.lanchat.model.SettingsStore
 
@@ -46,5 +47,6 @@ class SettingsActivity : AppCompatActivity() {
         SettingsStore.serverAddress = txtServerAddress.text.toString()
         SettingsStore.username = txtUsername.text.toString()
         SettingsStore.save(this)
+        Toast.makeText(this, "Settings saved", Toast.LENGTH_LONG).show()
     }
 }
