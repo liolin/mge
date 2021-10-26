@@ -33,4 +33,4 @@ Chat Activity
 
 
 Notification
-![Notification](img/notifcation.png)
+![Notification](img/notification.png)
