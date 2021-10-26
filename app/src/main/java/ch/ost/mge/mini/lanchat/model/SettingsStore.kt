@@ -1,8 +1,6 @@
 package ch.ost.mge.mini.lanchat.model
 
 import android.content.Context
-import android.content.SharedPreferences
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 
 object SettingsStore {
@@ -17,9 +15,9 @@ object SettingsStore {
     fun save(activity: AppCompatActivity) {
         val preferences = activity.getSharedPreferences(file, mode)
         val editor = preferences.edit()
-        editor.putString(usernameKey, SettingsStore.username)
-        editor.putString(serverKey, SettingsStore.serverAddress)
-        editor.commit()
+        editor.putString(usernameKey, username)
+        editor.putString(serverKey, serverAddress)
+        editor.apply()
     }
 
     fun load(activity: AppCompatActivity) {

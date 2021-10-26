@@ -43,6 +43,7 @@ class ChatActivity : AppCompatActivity(), Observer {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
 
+        val errorMsg = "Oh no. No connection to Server: ${SettingsStore.serverAddress}"
         username = SettingsStore.username
         notificationSender = NotificationSender(this)
         webSocketClient = WebSocketClient.create(
@@ -50,7 +51,7 @@ class ChatActivity : AppCompatActivity(), Observer {
             {},
             MessageRepository::addMessage,
             {},
-            { lblStatusMessage.text = "Oh no. No connection to Server: ${SettingsStore.serverAddress}" }
+            { lblStatusMessage.text = errorMsg }
         )
         webSocketClient.connect()
         MessageRepository.addObserver(this)
