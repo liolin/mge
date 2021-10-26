@@ -5,9 +5,32 @@ Ein LAN Messanger App, welche über Websockets mit einem Server spricht. Um den 
 
 - WebSocketServer: [ws-echo-server](https://github.com/sunny-zuo/ws-echo-server)
 - WebSocketLibrary: [Java-Websocket](https://github.com/TooTallNate/Java-WebSocket)
+- JSON Serialisierung: [Gson](https://github.com/google/gson)
 
-Features (Punkteverteilung)
+## Punkteverteilung
+Features 
 - [X] Verwendung von Kotlin statt Java (3Pt)
-- [ ] Verwendung von Notifications (1-2Pt)
+- [X] Verwendung von Notifications (1-2Pt)
 - [X] Verwendung von Webservices / Drittkomponenten (Libraries), Websockets und Gson (1-3Pt)
 - [X] Persistenz (Speichern von Settings) (1-3Pt)
+
+
+Implementierung:
+- [X] Observer Pattern für Notification / Rendering, wenn neue Nachricht erhalten
+
+
+## Images
+Start Actvity 
+![Start Screen](img/start_screen.png)
+
+
+Settings Activity
+![Settings Screen](img/settings_screen.png)
+
+
+Chat Activity
+![Chat Screen](img/chat_screen.png)
+
+
+Notification
+![Notification](img/notifcation.png)
