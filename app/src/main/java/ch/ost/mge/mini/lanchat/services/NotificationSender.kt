@@ -5,6 +5,8 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 
@@ -14,6 +16,7 @@ class NotificationSender(context: Context) {
     private val channelDescription = context.getString(R.string.CDESC)
     private val channelImportance = NotificationManager.IMPORTANCE_HIGH
     private val manager = NotificationManagerCompat.from(context)
+    private val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
     private var notificationId = 1
 
@@ -35,5 +38,13 @@ class NotificationSender(context: Context) {
             .build()
 
         manager.notify(notificationId++, notification)
+
+        if (Build.VERSION.SDK_INT < 29) {
+            vibrator.vibrate(500)
+        } else {
+            val effectId = VibrationEffect.EFFECT_HEAVY_CLICK
+            val effect = VibrationEffect.createPredefined(effectId)
+            vibrator.vibrate(effect)
+        }
     }
 }
