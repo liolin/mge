@@ -9,10 +9,11 @@ Ein LAN Messanger App, welche über Websockets mit einem Server spricht. Um den 
 
 ## Punkteverteilung
 Features 
-- [X] Verwendung von Kotlin statt Java (3Pt)
-- [X] Verwendung von Notifications (1-2Pt)
-- [X] Verwendung von Webservices / Drittkomponenten (Libraries), Websockets und Gson (1-3Pt)
-- [X] Persistenz (Speichern von Settings) (1-3Pt)
+- [X] Verwendung von Kotlin statt Java
+- [X] Verwendung von Notifications
+- [X] Verwendung von Actoren (Vibration)
+- [X] Verwendung von Drittkomponenten (Websockets und Gson)
+- [X] Persistenz (Speichern von Settings)
 
 
 Implementierung:
